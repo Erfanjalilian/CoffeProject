@@ -10,9 +10,9 @@ function HomePage(){
         <div>
             <HeroSlider />
             <AboutSection />
-            <FeaturedProducts />
+            
             <PromoBanner />
-            <ProductsSection />
+          
             <WhyChooseUs />
             <FinalCTA />
         </div>
