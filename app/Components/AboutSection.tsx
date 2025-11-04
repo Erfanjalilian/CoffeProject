@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function AboutSection() {
   return (
-    <section className="max-w-6xl mx-auto px-4 py-20 flex flex-col md:flex-row items-center gap-10">
+    <section className="max-w-6xl mx-auto px-4 py-20 flex flex-col md:flex-row items-center gap-10 overflow-x-hidden">
       {/* تصویر برند */}
       <motion.div
         initial={{ opacity: 0, x: -50 }}
@@ -14,7 +14,7 @@ export default function AboutSection() {
         className="relative w-full md:w-1/2 h-80 md:h-[400px] rounded-xl overflow-hidden shadow-lg"
       >
         <Image
-          src="/Images/photo-1514432324607-a09d9b4aefdd.avif" // تصویر را در public/images قرار بده
+          src="/Images/photo-1514432324607-a09d9b4aefdd.avif"
           alt="معرفی برند قهوه"
           fill
           className="object-cover"
