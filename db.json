@@ -1,0 +1,389 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "sku": "CL-AR001-1KG",
+      "slug": "arabica-1kg-premium",
+      "name": "قهوه عربیکا پریمیوم ۱ کیلوگرمی",
+      "short_description": "دانه‌های ۱۰۰٪ عربیکا با عطر و طعم نرم و نت‌های شکلاتی.",
+      "description": "<p>قهوه عربیکا پریمیوم مناسب کافه‌ها و فروشندگان عمده. دانه‌های دست‌چین شده از مزارع کوهستانی؛ فرآوری شسته و برشته‌کاری متوسط برای تعادل طعم و عطر.</p><ul><li>مناسب برای اسپرسو و دمی</li><li>طعم: شکلات، کارامل، میوه‌ای ملایم</li><li>وزن بسته: 1kg</li></ul>",
+      "images": [
+        "https://images.unsplash.com/photo-1525457136159-8878648a7ad1?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "price": 120000,
+      "currency": "IRR",
+      "discount_percentage": 10,
+      "sale_price": 108000,
+      "is_featured": true,
+      "is_new": false,
+      "categories": [1, 3],
+      "tags": ["عربیکا", "پرفروش", "اسپرسو"],
+      "stock": 250,
+      "min_order_qty": 5,
+      "unit": "kg",
+      "weight_kg": 1,
+      "dimensions_cm": { "width": 15, "height": 35, "depth": 8 },
+      "attributes": {
+        "roast_level": "Medium",
+        "origin": "کلمبیا",
+        "process": "Washed",
+        "flavor_notes": ["شکلاتی", "کاراملی", "میوه‌ای"]
+      },
+      "rating": 4.7,
+      "reviews": [1, 2],
+      "shipping": {
+        "ships_from": "تهران",
+        "shipping_weight_kg": 1.2,
+        "shipping_cost": 15000
+      },
+      "created_at": "2025-10-01T10:00:00.000Z",
+      "updated_at": "2025-10-12T12:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "sku": "CL-ES001-250G",
+      "slug": "espresso-blend-250g",
+      "name": "بلند اسپرسو ۲۵۰ گرمی",
+      "short_description": "بلند اسپرسو با کرمای غنی و بادی قوی، مناسب قهوه‌سازهای حرفه‌ای.",
+      "description": "<p>مخلوطی اختصاصی برای اسپرسو با تعادل عالی بین طعم و کرما. برشته‌کاری تیره برای استخراج بهتر در اسپرسو ماشینی.</p>",
+      "images": [
+        "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "price": 45000,
+      "currency": "IRR",
+      "discount_percentage": 0,
+      "sale_price": 45000,
+      "is_featured": true,
+      "is_new": true,
+      "categories": [2, 3],
+      "tags": ["اسپرسو", "بسته کوچک"],
+      "stock": 120,
+      "min_order_qty": 10,
+      "unit": "g",
+      "weight_kg": 0.25,
+      "dimensions_cm": { "width": 12, "height": 20, "depth": 6 },
+      "attributes": {
+        "roast_level": "Dark",
+        "origin": "مخلوط (Brazil, India)",
+        "process": "Natural/Blend",
+        "flavor_notes": ["شکلات تلخ", "زنجبیلی", "بادام"]
+      },
+      "rating": 4.5,
+      "reviews": [3],
+      "shipping": {
+        "ships_from": "اصفهان",
+        "shipping_weight_kg": 0.3,
+        "shipping_cost": 9000
+      },
+      "created_at": "2025-10-10T09:30:00.000Z",
+      "updated_at": "2025-10-10T09:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "sku": "CL-TK001-1KG",
+      "slug": "turkish-coffee-1kg",
+      "name": "قهوه ترک سنتی ۱ کیلوگرمی",
+      "short_description": "آسیاب بسیار ریز مناسب تهیهٔ ترک؛ عطری غنی و طعمی اصیل.",
+      "description": "<p>قهوه ترک با آسیاب خیلی ریز و برشته‌کاری مخصوص برای رسیدن به عطری اصیل. مناسب برای مشتریان سنتی و رستوران‌ها.</p>",
+      "images": [
+        "/images/product_turk_1.jpg"
+      ],
+      "price": 85000,
+      "currency": "IRR",
+      "discount_percentage": 5,
+      "sale_price": 80750,
+      "is_featured": false,
+      "is_new": false,
+      "categories": [4],
+      "tags": ["ترک", "آسیاب ریز"],
+      "stock": 80,
+      "min_order_qty": 3,
+      "unit": "kg",
+      "weight_kg": 1,
+      "dimensions_cm": { "width": 14, "height": 33, "depth": 9 },
+      "attributes": {
+        "roast_level": "Medium-Dark",
+        "origin": "ترکیبی (مخلوط محلی)",
+        "process": "Blend",
+        "flavor_notes": ["تلخی کنترل‌شده", "عطر قوی"]
+      },
+      "rating": 4.3,
+      "reviews": [],
+      "shipping": {
+        "ships_from": "شیراز",
+        "shipping_weight_kg": 1.2,
+        "shipping_cost": 12000
+      },
+      "created_at": "2025-09-20T07:20:00.000Z",
+      "updated_at": "2025-10-05T11:10:00.000Z"
+    },
+    {
+      "id": 4,
+      "sku": "CL-GT001-500G",
+      "slug": "single-origin-guatemala-500g",
+      "name": "قهوه تک‌منشأ گواتمالا ۵۰۰ گرمی",
+      "short_description": "دانهٔ تک‌منشأ گواتمالا — عطر مرکبات و اسیدیتهٔ ملایم.",
+      "description": "<p>یک انتخاب عالی برای عاشقان قهوهٔ تخصصی؛ دانه‌های تک‌منشأ با روست سبک تا نت‌های میوه‌ای حفظ شود.</p>",
+      "images": [
+        "https://images.unsplash.com/photo-1524350876685-274059332603?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "price": 135000,
+      "currency": "IRR",
+      "discount_percentage": 15,
+      "sale_price": 114750,
+      "is_featured": false,
+      "is_new": true,
+      "categories": [3, 5],
+      "tags": ["تک‌منشأ", "گواتمالا", "مخصوص کافه"],
+      "stock": 45,
+      "min_order_qty": 2,
+      "unit": "g",
+      "weight_kg": 0.5,
+      "dimensions_cm": { "width": 13, "height": 25, "depth": 7 },
+      "attributes": {
+        "roast_level": "Light",
+        "origin": "گواتمالا",
+        "process": "Washed",
+        "flavor_notes": ["مرکبات", "فِلُورال", "شیرینی طبیعی"]
+      },
+      "rating": 4.9,
+      "reviews": [4, 5],
+      "shipping": {
+        "ships_from": "تهران",
+        "shipping_weight_kg": 0.6,
+        "shipping_cost": 18000
+      },
+      "created_at": "2025-10-20T14:00:00.000Z",
+      "updated_at": "2025-10-21T08:45:00.000Z"
+    },
+    {
+      "id": 5,
+      "sku": "CL-ORG001-250G",
+      "slug": "organic-ethiopia-250g",
+      "name": "قهوه ارگانیک اتیوپی ۲۵۰ گرمی",
+      "short_description": "ارگانیک، با نت‌های گل و میوه؛ مناسب برای دمی و فیلتری.",
+      "description": "<p>دانه‌های ارگانیک اتیوپی با پروفایل میوه‌ای و عطری گل‌مانند؛ مناسب برای مشتریانی که طعم‌های میوه‌ای می‌پسندند.</p>",
+      "images": [
+        "https://images.unsplash.com/photo-1590650046871-92c887180603?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "price": 78000,
+      "currency": "IRR",
+      "discount_percentage": 0,
+      "sale_price": 78000,
+      "is_featured": false,
+      "is_new": true,
+      "categories": [5],
+      "tags": ["ارگانیک", "اتیوپی", "فیلتر"],
+      "stock": 60,
+      "min_order_qty": 5,
+      "unit": "g",
+      "weight_kg": 0.25,
+      "dimensions_cm": { "width": 11, "height": 18, "depth": 5 },
+      "attributes": {
+        "roast_level": "Light",
+        "origin": "اتیوپی",
+        "process": "Natural",
+        "flavor_notes": ["گل", "توت‌فرنگی", "عسل"]
+      },
+      "rating": 4.6,
+      "reviews": [],
+      "shipping": {
+        "ships_from": "قم",
+        "shipping_weight_kg": 0.3,
+        "shipping_cost": 9000
+      },
+      "created_at": "2025-10-25T11:15:00.000Z",
+      "updated_at": "2025-10-25T11:15:00.000Z"
+    },
+    {
+      "id": 6,
+      "sku": "CL-PROD-BUNDLE-1",
+      "slug": "starter-bundle-3x250g",
+      "name": "باندل آشنایی (۳×۲۵۰گرم)",
+      "short_description": "سه بستهٔ ۲۵۰ گرمی از سه پروفایل مختلف — عالی برای تست و انتخاب.",
+      "description": "<p>باندل شامل: اسپرسو کلاسیک، اتیوپی ارگانیک و ترک ویژه. مناسب برای کافه‌های تازه‌کار و خریداران عمده کوچک.</p>",
+      "images": [
+        "/images/bundle_3x250.jpg"
+      ],
+      "price": 260000,
+      "currency": "IRR",
+      "discount_percentage": 12,
+      "sale_price": 228800,
+      "is_featured": true,
+      "is_new": false,
+      "categories": [2, 5],
+      "tags": ["باندل", "مناسب تست", "پیشنهاد ویژه"],
+      "stock": 30,
+      "min_order_qty": 1,
+      "unit": "bundle",
+      "weight_kg": 0.8,
+      "dimensions_cm": { "width": 25, "height": 18, "depth": 12 },
+      "attributes": {
+        "contents": [
+          {"name": "Espresso Classic", "weight_g": 250},
+          {"name": "Organic Ethiopia", "weight_g": 250},
+          {"name": "Turkish Blend", "weight_g": 250}
+        ]
+      },
+      "rating": 4.8,
+      "reviews": [6],
+      "shipping": {
+        "ships_from": "تهران",
+        "shipping_weight_kg": 1.0,
+        "shipping_cost": 22000
+      },
+      "created_at": "2025-09-05T08:00:00.000Z",
+      "updated_at": "2025-09-25T10:30:00.000Z"
+    },
+    {
+      "id": 7,
+      "sku": "CL-DEG001-100G",
+      "slug": "decaf-100g",
+      "name": "قهوه بدون کافئین ۱۰۰ گرمی",
+      "short_description": "قهوه بدون کافئین با حفظ طعم — مناسب مصرف‌کنندگان حساس به کافئین.",
+      "description": "<p>فرآیند دی‌کف با حلال‌های امن و حفظ پروفایل طعم؛ مناسب برای مصرف شبانه و مشتریانی که کافئین را محدود می‌کنند.</p>",
+      "images": [
+        "https://images.unsplash.com/photo-1606509036992-4399d5c5afe4?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "price": 42000,
+      "currency": "IRR",
+      "discount_percentage": 0,
+      "sale_price": 42000,
+      "is_featured": false,
+      "is_new": false,
+      "categories": [5],
+      "tags": ["بدون کافئین", "مناسب شب"],
+      "stock": 150,
+      "min_order_qty": 2,
+      "unit": "g",
+      "weight_kg": 0.1,
+      "dimensions_cm": { "width": 9, "height": 14, "depth": 4 },
+      "attributes": {
+        "roast_level": "Medium",
+        "origin": "مخلوط",
+        "process": "Decaffeinated",
+        "flavor_notes": ["ملایم", "شیرینی طبیعی"]
+      },
+      "rating": 4.2,
+      "reviews": [],
+      "shipping": {
+        "ships_from": "کرج",
+        "shipping_weight_kg": 0.15,
+        "shipping_cost": 7000
+      },
+      "created_at": "2025-08-12T09:00:00.000Z",
+      "updated_at": "2025-08-12T09:00:00.000Z"
+    },
+    {
+      "id": 8,
+      "sku": "CL-GIFT001",
+      "slug": "gift-pack-2x250",
+      "name": "پک هدیه لوکس (۲×۲۵۰گرم)",
+      "short_description": "پک هدیه با بسته‌بندی لوکس — مناسب هدیه شرکتی و مشتریان خاص.",
+      "description": "<p>این پک شامل دو بستهٔ ۲۵۰ گرمی از دو پروفایل منتخب در جعبهٔ مخصوص هدیه با برچسب برند است.</p>",
+      "images": [
+        "https://images.unsplash.com/photo-1526318472351-c75fcf0700f9?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "price": 320000,
+      "currency": "IRR",
+      "discount_percentage": 8,
+      "sale_price": 294400,
+      "is_featured": true,
+      "is_new": true,
+      "categories": [6],
+      "tags": ["هدیه", "لوکس", "شرکتی"],
+      "stock": 12,
+      "min_order_qty": 1,
+      "unit": "pack",
+      "weight_kg": 0.6,
+      "dimensions_cm": { "width": 30, "height": 12, "depth": 20 },
+      "attributes": {
+        "packaging": "Gift Box",
+        "contents": [
+          {"name": "Special Blend A", "weight_g": 250},
+          {"name": "Single Origin B", "weight_g": 250}
+        ]
+      },
+      "rating": 4.9,
+      "reviews": [],
+      "shipping": {
+        "ships_from": "تهران",
+        "shipping_weight_kg": 0.9,
+        "shipping_cost": 26000
+      },
+      "created_at": "2025-10-30T12:00:00.000Z",
+      "updated_at": "2025-10-30T12:00:00.000Z"
+    }
+  ],
+  "categories": [
+    { "id": 1, "name": "عربیکا" },
+    { "id": 2, "name": "بسته‌های کوچک" },
+    { "id": 3, "name": "محصولات ویژه" },
+    { "id": 4, "name": "قهوه ترک" },
+    { "id": 5, "name": "تک‌منشأ / اسپشیالتی" },
+    { "id": 6, "name": "پک هدیه" }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "productId": 1,
+      "author": "سارا حسینی",
+      "rating": 5,
+      "title": "کیفیت عالی",
+      "body": "دانه‌ها تازه و بسته‌بندی حرفه‌ای. طعم فوق‌العاده‌ای داشت.",
+      "created_at": "2025-10-15T08:30:00.000Z"
+    },
+    {
+      "id": 2,
+      "productId": 1,
+      "author": "محمد کریمی",
+      "rating": 4,
+      "title": "بسیار خوب",
+      "body": "عطر و طعم خوب، اما برای سلیقهٔ من کمی ملایم بود.",
+      "created_at": "2025-10-18T10:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "productId": 2,
+      "author": "کافه رستا",
+      "rating": 5,
+      "title": "گزینهٔ عالی برای اسپرسو",
+      "body": "خرید عمده کردم، کرمای خیلی خوبی ساخت و مشتری‌ها راضی بودند.",
+      "created_at": "2025-10-11T12:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "productId": 4,
+      "author": "علی موسوی",
+      "rating": 5,
+      "title": "یکی از بهترین‌ها",
+      "body": "طعم مرکباتی و تازه، مخصوصا برای دم‌های فیلتر.",
+      "created_at": "2025-10-22T09:45:00.000Z"
+    },
+    {
+      "id": 5,
+      "productId": 4,
+      "author": "کافه‌خانه",
+      "rating": 4.8,
+      "title": "بسیار خوشمزه",
+      "body": "مشتریان ما این رو خیلی پسندیدند.",
+      "created_at": "2025-10-23T14:15:00.000Z"
+    },
+    {
+      "id": 6,
+      "productId": 6,
+      "author": "سفارش‌دهندهٔ شرکتی",
+      "rating": 5,
+      "title": "پکیج عالی برای هدیه",
+      "body": "بسته‌بندی زیبا و طعم‌های مختلف. برای هدیه شرکتی عالی بود.",
+      "created_at": "2025-09-10T11:00:00.000Z"
+    }
+  ],
+  "settings": {
+    "currency": "IRR",
+    "currency_symbol": "تومان",
+    "default_tax_percent": 9,
+    "free_shipping_over": 1000000
+  }
+}
