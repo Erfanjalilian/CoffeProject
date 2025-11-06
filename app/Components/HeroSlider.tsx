@@ -57,129 +57,58 @@ export default function HeroSection() {
       bgGradient: "from-purple-50 to-pink-50",
       accent: "bg-gradient-to-r from-purple-500 to-pink-500"
     },
+    {
+      id: 5,
+      title: "قهوه‌های فصلی",
+      items: [
+        { name: "قهوه زمستانی", image: "/Images/premium_photo-1674407009848-4da7a12b6b25.avif" },
+        { name: "بلند دم", image: "/Images/premium_photo-1674327105076-36c4419864cf.avif" },
+        { name: "کوتاه دم", image: "/Images/premium_photo-1673545518947-ddf3240090b1.avif" },
+        { name: "مخلوط ویژه", image: "/Images/premium_photo-1671559021551-95106555ee19.avif" }
+      ],
+      gradient: "from-rose-500 to-pink-600",
+      bgGradient: "from-rose-50 to-pink-50",
+      accent: "bg-gradient-to-r from-rose-500 to-pink-600"
+    },
+    {
+      id: 6,
+      title: "اکسسوری قهوه",
+      items: [
+        { name: "فنجان سرامیک", image: "/Images/photo-1596098823457-74e360fcd023.avif" },
+        { name: "قاشق مخصوص", image: "/Images/photo-1594075731547-8c705bb69e50.avif" },
+        { name: "ترازو قهوه", image: "/Images/photo-1592663527359-cf6642f54cff.avif" },
+        { name: "تمپر قهوه", image: "/Images/photo-1514432324607-a09d9b4aefdd.avif" }
+      ],
+      gradient: "from-cyan-500 to-blue-600",
+      bgGradient: "from-cyan-50 to-blue-50",
+      accent: "bg-gradient-to-r from-cyan-500 to-blue-600"
+    },
   ];
 
   return (
     <section className="w-full bg-gradient-to-br from-amber-50 via-white to-amber-100 py-16 px-4 md:px-10 lg:px-20 mt-24">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {/* --- Enhanced Promotional Banner --- */}
+      <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="relative rounded-3xl overflow-hidden shadow-2xl h-[500px] lg:h-[600px] lg:col-span-1 group"
+          className="text-center mb-12"
         >
-          <Image 
-            src="/Images/photo-1496582490020-60c1344c64aa.avif" 
-            alt="بنر تبلیغاتی" 
-            fill 
-            className="object-cover group-hover:scale-110 transition-transform duration-700 brightness-90"
-            priority 
-          />
-          
-          {/* Enhanced Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end items-center text-white p-8">
-            
-            {/* Promotional Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="absolute top-6 left-6 bg-gradient-to-r from-amber-600 to-amber-700 text-white py-2 px-4 rounded-full text-sm font-bold shadow-lg"
-            >
-              ویژه ✨
-            </motion.div>
-
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-center font-[var(--font-yekan)] leading-tight"
-            >
-              تجربه طعم
-              <br />
-              <span className="bg-gradient-to-r from-amber-300 to-amber-100 bg-clip-text text-transparent">
-                اصیل قهوه
-              </span>
-            </motion.h2>
-            
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
-              className="text-lg lg:text-xl text-amber-100 mb-6 max-w-md text-center leading-relaxed"
-            >
-              بهترین طعم قهوه برای بهترین لحظات زندگی — تجربه‌ای از عطر و کیفیت واقعی.
-            </motion.p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 w-full max-w-xs">
-              <motion.button
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.4)" }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white py-3 px-6 rounded-full font-semibold shadow-lg transition-all duration-300 border border-amber-500 flex-1"
-              >
-                خرید کن
-              </motion.button>
-              
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white py-3 px-6 rounded-full font-semibold border border-white/30 transition-all duration-300 flex-1"
-              >
-                بیشتر بدانید
-              </motion.button>
-            </div>
-
-            {/* Additional Info */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="flex justify-center gap-6 mt-6 text-amber-100 text-sm"
-            >
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
-                تضمین کیفیت
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
-                ارسال رایگان
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Floating Elements */}
-          <motion.div
-            animate={{
-              y: [0, -10, 0],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="absolute top-1/4 right-4 w-8 h-8 bg-amber-400/20 rounded-full blur-sm"
-          />
-          <motion.div
-            animate={{
-              y: [0, 10, 0],
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1
-            }}
-            className="absolute bottom-1/4 left-4 w-6 h-6 bg-amber-300/20 rounded-full blur-sm"
-          />
+          <h1 className="text-4xl md:text-5xl font-bold text-amber-800 mb-4 font-[var(--font-yekan)]">
+            دسته‌بندی محصولات
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed font-[var(--font-yekan)]">
+            کشف کنید بهترین محصولات قهوه را در دسته‌بندی‌های متنوع ما
+          </p>
         </motion.div>
 
-        {/* --- دسته‌بندی‌ها --- */}
+        {/* Categories Grid - 3 columns on desktop */}
         <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {categories.map((cat, index) => (
             <motion.div
@@ -279,6 +208,22 @@ export default function HeroSection() {
               <div className={`absolute bottom-0 left-0 w-16 h-16 ${cat.accent} opacity-0 group-hover:opacity-10 rounded-tr-3xl transition-opacity duration-500`}></div>
             </motion.div>
           ))}
+        </motion.div>
+
+        {/* Call to Action */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="text-center mt-12"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(245, 158, 11, 0.3)" }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-semibold py-4 px-8 rounded-2xl shadow-lg transition-all duration-300 font-[var(--font-yekan)] text-lg"
+          >
+            مشاهده همه دسته‌بندی‌ها
+          </motion.button>
         </motion.div>
       </div>
 
