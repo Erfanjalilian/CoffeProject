@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { FiFilter, FiGrid, FiList, FiStar, FiShoppingCart, FiHeart, FiChevronDown, FiX } from "react-icons/fi";
+import { FiFilter, FiGrid, FiList, FiStar, FiShoppingCart, FiHeart, FiChevronDown, FiX, FiMessageCircle } from "react-icons/fi";
 
 export default function CoffeeCategoryPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -367,54 +367,96 @@ export default function CoffeeCategoryPage() {
             </div>
 
             {/* Header with Sort and View Options */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="bg-white rounded-2xl shadow-lg border border-amber-200 p-6 mb-6"
-            >
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <h1 className="text-2xl font-bold text-amber-800 mb-1 font-[var(--font-yekan)]">قهوه و تجهیزات</h1>
-                  <p className="text-gray-600 font-[var(--font-yekan)]">نمایش ۱-۱۲ از ۴۵ محصول</p>
-                </div>
+           <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6 }}
+  className="bg-gradient-to-r from-amber-50 to-amber-100 rounded-2xl shadow-lg border border-amber-200 p-6 mb-6"
+>
+  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+    <div className="flex items-center gap-4">
+      <div className="bg-amber-500 rounded-full p-3">
+        <FiMessageCircle className="text-white text-xl" />
+      </div>
+      <div>
+        <h3 className="text-lg font-bold text-amber-800 mb-1 font-[var(--font-yekan)]">
+          نیاز به مشاوره دارید؟
+        </h3>
+        <p className="text-amber-700 font-[var(--font-yekan)] text-sm">
+          برای دریافت راهنمایی تخصصی در انتخاب محصول، روی دکمه "از من بپرس" کلیک کنید
+        </p>
+      </div>
+    </div>
+    
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="flex items-center gap-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg font-[var(--font-yekan)] whitespace-nowrap"
+    >
+      <FiMessageCircle size={18} />
+      <span>از من بپرس</span>
+    </motion.button>
+  </div>
+</motion.div>
 
-                <div className="flex items-center gap-4">
-                  {/* View Mode Toggle */}
-                  <div className="flex items-center gap-2 bg-amber-50 rounded-xl p-1">
-                    <button
-                      onClick={() => setViewMode('grid')}
-                      className={`p-2 rounded-lg transition-all ${
-                        viewMode === 'grid' ? 'bg-white shadow-md text-amber-700' : 'text-gray-500'
-                      }`}
-                    >
-                      <FiGrid size={18} />
-                    </button>
-                    <button
-                      onClick={() => setViewMode('list')}
-                      className={`p-2 rounded-lg transition-all ${
-                        viewMode === 'list' ? 'bg-white shadow-md text-amber-700' : 'text-gray-500'
-                      }`}
-                    >
-                      <FiList size={18} />
-                    </button>
-                  </div>
 
-                  {/* Sort Options */}
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="bg-white border border-amber-200 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 font-[var(--font-yekan)]"
-                  >
-                    <option value="popular">پربازدیدترین</option>
-                    <option value="newest">جدیدترین</option>
-                    <option value="price-low">قیمت: کم به زیاد</option>
-                    <option value="price-high">قیمت: زیاد به کم</option>
-                    <option value="rating">بالاترین امتیاز</option>
-                  </select>
-                </div>
-              </div>
-            </motion.div>
+
+
+
+
+
+
+
+
+
+
+
+            {/* Filter Options */}
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6 }}
+  className="flex flex-wrap gap-3 mb-6"
+>
+  {['پربازدیدترین', 'پرفروش‌ترین', 'گران‌ترین', 'ارزان‌ترین'].map((filter, index) => (
+    <motion.button
+      key={filter}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.4, delay: index * 0.1 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className={`px-4 py-2 rounded-xl text-sm font-medium transition-all font-[var(--font-yekan)] ${
+        index === 0
+          ? 'bg-amber-600 text-white shadow-lg'
+          : 'bg-white text-gray-700 border border-amber-200 hover:bg-amber-50 hover:text-amber-700'
+      }`}
+    >
+      {filter}
+    </motion.button>
+  ))}
+</motion.div>
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             {/* Products Grid/List */}
             <motion.div
@@ -512,26 +554,41 @@ export default function CoffeeCategoryPage() {
                       )}
                     </div>
 
-                    {/* Price and Action */}
-                    <div className="flex items-center justify-between mt-3">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg font-bold text-amber-700 font-[var(--font-yekan)]">
-                          {product.price}
-                        </span>
-                        {product.originalPrice && (
-                          <span className="text-sm text-gray-500 line-through font-[var(--font-yekan)]">
-                            {product.originalPrice}
-                          </span>
-                        )}
+                    {/* Price and Actions */}
+                    <div className="space-y-2 mt-3">
+                      {/* Ask Me Button - Same size as Add to Cart */}
+                      <div className="flex justify-end">
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-lg font-[var(--font-yekan)] whitespace-nowrap"
+                        >
+                          <FiMessageCircle size={14} />
+                          <span className="text-xs">از من بپرس — آنلاین هستم</span>
+                        </motion.button>
                       </div>
-                      
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-lg font-[var(--font-yekan)]"
-                      >
-                        افزودن به سبد
-                      </motion.button>
+
+                      {/* Price and Add to Cart */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg font-bold text-amber-700 font-[var(--font-yekan)]">
+                            {product.price}
+                          </span>
+                          {product.originalPrice && (
+                            <span className="text-sm text-gray-500 line-through font-[var(--font-yekan)]">
+                              {product.originalPrice}
+                            </span>
+                          )}
+                        </div>
+                        
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-lg font-[var(--font-yekan)]"
+                        >
+                          افزودن به سبد
+                        </motion.button>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -690,5 +747,5 @@ export default function CoffeeCategoryPage() {
         )}
       </AnimatePresence>
     </div>
-  );
+  ); 
 }

@@ -89,19 +89,7 @@ export default function HeroSection() {
     <section className="w-full bg-gradient-to-br from-amber-50 via-white to-amber-100 py-16 px-4 md:px-10 lg:px-20 mt-24">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold text-amber-800 mb-4 font-[var(--font-yekan)]">
-            دسته‌بندی محصولات
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed font-[var(--font-yekan)]">
-            کشف کنید بهترین محصولات قهوه را در دسته‌بندی‌های متنوع ما
-          </p>
-        </motion.div>
+     
 
         {/* Categories Grid - 3 columns on desktop */}
         <motion.div
