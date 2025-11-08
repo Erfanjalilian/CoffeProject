@@ -2,9 +2,24 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+
+interface Product {
+  id: number;
+  name: string;
+  price: string;
+  image: string;
+  category?: string;
+  badge?: string;
+  rating: number;
+}
 
 export default function AboutSection() {
-  const featuredProducts = [
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState<boolean>(false);
+  const [showRightArrow, setShowRightArrow] = useState<boolean>(true);
+
+  const featuredProducts: Product[] = [
     {
       id: 1,
       name: "قهوه اسپرسو ایتالیایی",
@@ -40,15 +55,14 @@ export default function AboutSection() {
       category: "نوشیدنی",
       badge: "محبوب",
       rating: 4.7
-    }
-  ];
-
-  const bestSellers = [
+    },
     {
       id: 5,
       name: "آسیاب قهوه حرفه‌ای",
       price: "۳۵۰,۰۰۰ تومان",
       image: "/Images/photo-1592663527359-cf6642f54cff.avif",
+      category: "تجهیزات",
+      badge: "پرفروش",
       rating: 4.8
     },
     {
@@ -56,6 +70,8 @@ export default function AboutSection() {
       name: "موکاپات استیل",
       price: "۱۴۰,۰۰۰ تومان",
       image: "/Images/photo-1594075731547-8c705bb69e50.avif",
+      category: "تجهیزات",
+      badge: "جدید",
       rating: 4.6
     },
     {
@@ -63,47 +79,150 @@ export default function AboutSection() {
       name: "قهوه عربیکا اتیوپی",
       price: "۳۱۰,۰۰۰ تومان",
       image: "/Images/photo-1525088553748-01d6e210e00b.avif",
+      category: "دانه خاص",
+      badge: "ویژه",
       rating: 4.9
-    },
+    }
+  ];
+
+  const bestSellers: Product[] = [
     {
       id: 8,
       name: "پورتافیلتر فلزی",
       price: "۹۰,۰۰۰ تومان",
       image: "/Images/photo-1514432324607-a09d9b4aefdd.avif",
       rating: 4.7
+    },
+    {
+      id: 9,
+      name: "فیلتر کاغذی قهوه",
+      price: "۴۵,۰۰۰ تومان",
+      image: "/Images/photo-1592663527359-cf6642f54cff.avif",
+      rating: 4.5
+    },
+    {
+      id: 10,
+      name: "قیف پور اوور",
+      price: "۱۲۰,۰۰۰ تومان",
+      image: "/Images/photo-1594075731547-8c705bb69e50.avif",
+      rating: 4.6
+    },
+    {
+      id: 11,
+      name: "فنجان سرامیکی",
+      price: "۸۵,۰۰۰ تومان",
+      image: "/Images/photo-1525088553748-01d6e210e00b.avif",
+      rating: 4.7
     }
   ];
 
-  return (
-    <section className="w-full bg-gradient-to-b from-amber-50 to-white py-20 px-4 md:px-10 lg:px-20">
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-      
+  // Fix for RTL scroll detection
+  useEffect(() => {
+    updateArrowVisibility();
+  }, []);
 
-        {/* Featured Products Section */}
+  const scroll = (direction: 'left' | 'right'): void => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const scrollAmount = 300;
+      // Fixed scroll direction:
+      // - Left arrow should scroll left (negative)
+      // - Right arrow should scroll right (positive)
+      const newScrollLeft = direction === 'left' 
+        ? container.scrollLeft - scrollAmount
+        : container.scrollLeft + scrollAmount;
+      
+      container.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      });
+
+      setTimeout(() => {
+        updateArrowVisibility();
+      }, 300);
+    }
+  };
+
+  const updateArrowVisibility = (): void => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      const currentScroll = container.scrollLeft;
+      
+      // Fixed arrow visibility logic:
+      // - Left arrow shows when we can scroll left (scrollLeft > 0)
+      // - Right arrow shows when we can scroll right (scrollLeft < maxScroll)
+      setShowLeftArrow(currentScroll > 0);
+      setShowRightArrow(currentScroll < maxScroll - 10); // -10 for tolerance
+    }
+  };
+
+  return (
+    <section className="w-full bg-gradient-to-b from-amber-50 to-white py-20 px-4 md:px-10 lg:px-20" dir="rtl">
+      <div className="max-w-7xl mx-auto">
+        {/* Featured Products Section with Horizontal Scroll */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-3xl p-8 mb-16 border-2 border-amber-200/80"
+          className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-3xl p-8 mb-16 border-2 border-amber-200/80 relative"
         >
           <div className="mb-8">
             <h3 className="text-2xl md:text-3xl font-bold text-amber-800 mb-2 font-[var(--font-yekan)]">
               محصولات ویژه
             </h3>
             <p className="text-gray-600 font-[var(--font-yekan)]">
-              منتخب بهترین محصولات با کیفیت تضمینی
+              بهترین محصولات قهوه و تجهیزات برای شما
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Scroll Arrows - Fixed direction */}
+          {showLeftArrow && (
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              onClick={() => scroll('left')}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-amber-700 w-10 h-10 rounded-full shadow-lg flex items-center justify-center z-10 transition-all duration-300 hover:scale-110 border border-amber-200"
+              aria-label="Scroll left"
+            >
+              {/* Left arrow icon */}
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </motion.button>
+          )}
+
+          {showRightArrow && (
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              onClick={() => scroll('right')}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-amber-700 w-10 h-10 rounded-full shadow-lg flex items-center justify-center z-10 transition-all duration-300 hover:scale-110 border border-amber-200"
+              aria-label="Scroll right"
+            >
+              {/* Right arrow icon */}
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </motion.button>
+          )}
+
+          {/* Horizontal Scroll Container */}
+          <div 
+            ref={scrollContainerRef}
+            onScroll={updateArrowVisibility}
+            className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide scroll-smooth"
+            dir="ltr" // Force LTR for scroll container to work properly
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
             {featuredProducts.map((product, index) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 group border-2 border-amber-100/80 hover:border-amber-200"
+                className="flex-shrink-0 w-64 bg-white rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 group border-2 border-amber-100/80 hover:border-amber-200"
+                dir="rtl" // RTL for card content
               >
                 <div className="relative h-32 mb-4 rounded-xl overflow-hidden">
                   <Image
@@ -112,18 +231,21 @@ export default function AboutSection() {
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  {/* Product Badge */}
                   <div className="absolute top-2 right-2">
-                    <span className="bg-gradient-to-r from-amber-600 to-amber-700 text-white text-xs px-2 py-1 rounded-full font-medium">
+                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                      product.badge === 'پرفروش' ? 'bg-red-500 text-white' :
+                      product.badge === 'جدید' ? 'bg-green-500 text-white' :
+                      product.badge === 'ویژه' ? 'bg-purple-500 text-white' :
+                      'bg-amber-500 text-white'
+                    } font-[var(--font-yekan)]`}>
                       {product.badge}
                     </span>
                   </div>
-                  {/* Category Badge */}
-                  <div className="absolute top-2 left-2">
-                    <span className="bg-amber-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                      {product.category}
-                    </span>
-                  </div>
+                </div>
+                <div className="mb-2">
+                  <span className="text-xs text-amber-600 bg-amber-100 px-2 py-1 rounded-full font-[var(--font-yekan)]">
+                    {product.category}
+                  </span>
                 </div>
                 <h4 className="font-bold text-gray-800 mb-2 text-sm font-[var(--font-yekan)]">
                   {product.name}
@@ -143,14 +265,14 @@ export default function AboutSection() {
             ))}
           </div>
 
-          {/* View All Button - Moved to the end */}
-          <div className="text-center">
+          {/* View All Button */}
+          <div className="text-center mt-6">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-white text-amber-700 border-2 border-amber-300 px-8 py-3 rounded-2xl font-semibold hover:bg-amber-50 transition-colors font-[var(--font-yekan)]"
             >
-              مشاهده همه محصولات ویژه
+              مشاهده همه محصولات
             </motion.button>
           </div>
         </motion.div>
@@ -206,7 +328,6 @@ export default function AboutSection() {
             ))}
           </div>
 
-          {/* View All Button - Moved to the end */}
           <div className="text-center">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -234,6 +355,16 @@ export default function AboutSection() {
           </motion.button>
         </motion.div>
       </div>
+
+      <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
 }
