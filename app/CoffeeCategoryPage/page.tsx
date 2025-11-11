@@ -2,190 +2,97 @@
 
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiFilter, FiGrid, FiList, FiStar, FiShoppingCart, FiHeart, FiChevronDown, FiX, FiMessageCircle } from "react-icons/fi";
+import Link from "next/link";
+
+interface Product {
+  id: number;
+  name: string;
+  price: string;
+  originalPrice?: string;
+  image: string;
+  category: string;
+  badge: string;
+  rating: number;
+  reviews: number;
+  isPrime: boolean;
+  discount: number;
+  type: string;
+}
+
+interface Category {
+  id: number;
+  name: string;
+  count: number;
+  active: boolean;
+}
+
+interface PriceRange {
+  id: number;
+  label: string;
+  value: string;
+}
+
+interface Filters {
+  brands: string[];
+  priceRanges: PriceRange[];
+  ratings: number[];
+}
 
 export default function CoffeeCategoryPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('popular');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [expandedFilter, setExpandedFilter] = useState<string | null>(null);
+  const [coffeeProducts, setCoffeeProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [filters, setFilters] = useState<Filters>({ brands: [], priceRanges: [], ratings: [] });
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const coffeeProducts = [
-    {
-      id: 1,
-      name: "قهوه اسپرسو ایتالیایی",
-      price: "۲۹۰,۰۰۰ تومان",
-      originalPrice: "۳۴۰,۰۰۰ تومان",
-      image: "/Images/premium_photo-1674407009848-4da7a12b6b25.avif",
-      category: "نوشیدنی",
-      badge: "پرفروش",
-      rating: 4.8,
-      reviews: 124,
-      isPrime: true,
-      discount: 15
-    },
-    {
-      id: 2,
-      name: "فرنچ پرس شیشه‌ای حرفه‌ای",
-      price: "۱۸۰,۰۰۰ تومان",
-      originalPrice: "۲۲۰,۰۰۰ تومان",
-      image: "/Images/photo-1596098823457-74e360fcd023.avif",
-      category: "تجهیزات",
-      badge: "جدید",
-      rating: 4.6,
-      reviews: 89,
-      isPrime: true,
-      discount: 18
-    },
-    {
-      id: 3,
-      name: "دانه قهوه برزیل درجه یک",
-      price: "۲۲۰,۰۰۰ تومان",
-      image: "/Images/premium_photo-1671379526961-1aebb82b317b.avif",
-      category: "دانه خاص",
-      badge: "ویژه",
-      rating: 4.9,
-      reviews: 203,
-      isPrime: true,
-      discount: 0
-    },
-    {
-      id: 4,
-      name: "قهوه ترک اصل استانبولی",
-      price: "۲۶۰,۰۰۰ تومان",
-      originalPrice: "۳۰۰,۰۰۰ تومان",
-      image: "/Images/premium_photo-1674327105076-36c4419864cf.avif",
-      category: "نوشیدنی",
-      badge: "محبوب",
-      rating: 4.7,
-      reviews: 156,
-      isPrime: false,
-      discount: 13
-    },
-    {
-      id: 5,
-      name: "آسیاب قهوه حرفه‌ای دیجیتال",
-      price: "۳۵۰,۰۰۰ تومان",
-      image: "/Images/photo-1592663527359-cf6642f54cff.avif",
-      category: "تجهیزات",
-      badge: "پرفروش",
-      rating: 4.8,
-      reviews: 78,
-      isPrime: true,
-      discount: 0
-    },
-    {
-      id: 6,
-      name: "موکاپات استیل ایتالیایی",
-      price: "۱۴۰,۰۰۰ تومان",
-      originalPrice: "۱۷۰,۰۰۰ تومان",
-      image: "/Images/photo-1594075731547-8c705bb69e50.avif",
-      category: "تجهیزات",
-      badge: "جدید",
-      rating: 4.6,
-      reviews: 92,
-      isPrime: true,
-      discount: 18
-    },
-    {
-      id: 7,
-      name: "قهوه عربیکا اتیوپی درجه یک",
-      price: "۳۱۰,۰۰۰ تومان",
-      image: "/Images/photo-1525088553748-01d6e210e00b.avif",
-      category: "دانه خاص",
-      badge: "ویژه",
-      rating: 4.9,
-      reviews: 167,
-      isPrime: true,
-      discount: 0
-    },
-    {
-      id: 8,
-      name: "پورتافیلتر فلزی حرفه‌ای",
-      price: "۹۰,۰۰۰ تومان",
-      originalPrice: "۱۲۰,۰۰۰ تومان",
-      image: "/Images/photo-1514432324607-a09d9b4aefdd.avif",
-      category: "تجهیزات",
-      badge: "محبوب",
-      rating: 4.7,
-      reviews: 64,
-      isPrime: false,
-      discount: 25
-    },
-    {
-      id: 9,
-      name: "قهوه کلمبیا سوپریم",
-      price: "۲۷۰,۰۰۰ تومان",
-      image: "/Images/premium_photo-1669687924558-386bff1a0469.avif",
-      category: "نوشیدنی",
-      badge: "پرفروش",
-      rating: 4.8,
-      reviews: 134,
-      isPrime: true,
-      discount: 0
-    },
-    {
-      id: 10,
-      name: "سرمaker قهوه ساز چند کاره",
-      price: "۴۲۰,۰۰۰ تومان",
-      originalPrice: "۵۰۰,۰۰۰ تومان",
-      image: "/Images/premium_photo-1664970900335-a7c99062bc51.avif",
-      category: "تجهیزات",
-      badge: "جدید",
-      rating: 4.5,
-      reviews: 45,
-      isPrime: true,
-      discount: 16
-    },
-    {
-      id: 11,
-      name: "قهوه کنیا AA",
-      price: "۳۳۰,۰۰۰ تومان",
-      image: "/Images/photo-1621135177072-57c9b6242e7a.avif",
-      category: "دانه خاص",
-      badge: "ویژه",
-      rating: 4.9,
-      reviews: 98,
-      isPrime: true,
-      discount: 0
-    },
-    {
-      id: 12,
-      name: "ست کامل قهوه ساز خانگی",
-      price: "۵۵۰,۰۰۰ تومان",
-      originalPrice: "۶۸۰,۰۰۰ تومان",
-      image: "/Images/photo-1514066558159-fc8c737ef259.avif",
-      category: "تجهیزات",
-      badge: "پرفروش",
-      rating: 4.7,
-      reviews: 112,
-      isPrime: true,
-      discount: 19
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        const response = await fetch('https://6810ff2827f2fdac24139dec.mockapi.io/Product');
+        const data = await response.json();
+        console.log(data)
+        
+        // The new API returns a flat products array directly
+        setCoffeeProducts(data|| []);
+        
+        // For categories and filters, we'll use static data since your mock API doesn't include them
+        setCategories([
+          { id: 1, name: "همه دسته‌بندی‌ها", count: 45, active: true },
+          { id: 2, name: "قهوه اسپرسو", count: 12, active: false },
+          { id: 3, name: "قهوه ترک", count: 8, active: false },
+          { id: 4, name: "دانه قهوه", count: 15, active: false },
+          { id: 5, name: "قهوه فوری", count: 5, active: false },
+          { id: 6, name: "تجهیزات دم‌آوری", count: 25, active: false },
+          { id: 7, name: "اکسسوری قهوه", count: 18, active: false }
+        ]);
+        
+        setFilters({
+          brands: ["دیویدوف", "لاوازا", "ایلی", "استارباکس", "نسپرسو", "کمکس"],
+          priceRanges: [
+            { id: 1, label: "زیر ۱۰۰ هزار تومان", value: "0-100" },
+            { id: 2, label: "۱۰۰ تا ۳۰۰ هزار تومان", value: "100-300" },
+            { id: 3, label: "۳۰۰ تا ۵۰۰ هزار تومان", value: "300-500" },
+            { id: 4, label: "بالای ۵۰۰ هزار تومان", value: "500-1000" }
+          ],
+          ratings: [4, 3, 2, 1]
+        });
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setLoading(false);
+      }
     }
-  ];
+    
+    loadData();
+  }, []);
 
-  const categories = [
-    { name: "همه دسته‌بندی‌ها", count: 45, active: true },
-    { name: "قهوه اسپرسو", count: 12, active: false },
-    { name: "قهوه ترک", count: 8, active: false },
-    { name: "دانه قهوه", count: 15, active: false },
-    { name: "قهوه فوری", count: 5, active: false },
-    { name: "تجهیزات دم‌آوری", count: 25, active: false },
-    { name: "اکسسوری قهوه", count: 18, active: false }
-  ];
-
-  const filters = {
-    brands: ["دیویدوف", "لاوازا", "ایلی", "استارباکس", "نسپرسو", "کمکس"],
-    priceRanges: [
-      { label: "زیر ۱۰۰ هزار تومان", value: "0-100" },
-      { label: "۱۰۰ تا ۳۰۰ هزار تومان", value: "100-300" },
-      { label: "۳۰۰ تا ۵۰۰ هزار تومان", value: "300-500" },
-      { label: "بالای ۵۰۰ هزار تومان", value: "500-1000" }
-    ],
-    ratings: [4, 3, 2, 1]
-  };
-
+  // Rest of the component remains EXACTLY the same as your original design
   const FilterSection = ({ title, children, filterKey }: { title: string; children: React.ReactNode; filterKey: string }) => (
     <div className="border-b border-amber-200 last:border-b-0">
       <button
@@ -216,10 +123,21 @@ export default function CoffeeCategoryPage() {
     </div>
   );
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white pt-24 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 font-[var(--font-yekan)]">در حال بارگذاری محصولات...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumb - Fixed with more top margin */}
+        {/* Breadcrumb */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -233,7 +151,7 @@ export default function CoffeeCategoryPage() {
         </motion.div>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Desktop Sidebar Filters - Hidden on mobile */}
+          {/* Desktop Sidebar Filters */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -252,7 +170,7 @@ export default function CoffeeCategoryPage() {
                 <div className="space-y-2">
                   {categories.map((category, index) => (
                     <motion.label
-                      key={category.name}
+                      key={category.id}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -283,7 +201,7 @@ export default function CoffeeCategoryPage() {
                 <div className="space-y-2">
                   {filters.priceRanges.map((range, index) => (
                     <motion.label
-                      key={range.value}
+                      key={range.id}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -350,7 +268,7 @@ export default function CoffeeCategoryPage() {
 
           {/* Main Content */}
           <div className="flex-1">
-            {/* Mobile Filter Button - Only visible on mobile */}
+            {/* Mobile Filter Button */}
             <div className="lg:hidden mb-4">
               <motion.button
                 whileHover={{ scale: 1.02 }}
@@ -367,96 +285,63 @@ export default function CoffeeCategoryPage() {
             </div>
 
             {/* Header with Sort and View Options */}
-           <motion.div
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.6 }}
-  className="bg-gradient-to-r from-amber-50 to-amber-100 rounded-2xl shadow-lg border border-amber-200 p-6 mb-6"
->
-  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-    <div className="flex items-center gap-4">
-      <div className="bg-amber-500 rounded-full p-3">
-        <FiMessageCircle className="text-white text-xl" />
-      </div>
-      <div>
-        <h3 className="text-lg font-bold text-amber-800 mb-1 font-[var(--font-yekan)]">
-          نیاز به مشاوره دارید؟
-        </h3>
-        <p className="text-amber-700 font-[var(--font-yekan)] text-sm">
-          برای دریافت راهنمایی تخصصی در انتخاب محصول، روی دکمه "از من بپرس" کلیک کنید
-        </p>
-      </div>
-    </div>
-    
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className="flex items-center gap-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg font-[var(--font-yekan)] whitespace-nowrap"
-    >
-      <FiMessageCircle size={18} />
-      <span>از من بپرس</span>
-    </motion.button>
-  </div>
-</motion.div>
-
-
-
-
-
-
-
-
-
-
-
-
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="bg-gradient-to-r from-amber-50 to-amber-100 rounded-2xl shadow-lg border border-amber-200 p-6 mb-6"
+            >
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="bg-amber-500 rounded-full p-3">
+                    <FiMessageCircle className="text-white text-xl" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-amber-800 mb-1 font-[var(--font-yekan)]">
+                      نیاز به مشاوره دارید؟
+                    </h3>
+                    <p className="text-amber-700 font-[var(--font-yekan)] text-sm">
+                      برای دریافت راهنمایی تخصصی در انتخاب محصول، روی دکمه "از من بپرس" کلیک کنید
+                    </p>
+                  </div>
+                </div>
+                
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg font-[var(--font-yekan)] whitespace-nowrap"
+                >
+                  <FiMessageCircle size={18} />
+                  <span>از من بپرس</span>
+                </motion.button>
+              </div>
+            </motion.div>
 
             {/* Filter Options */}
-<motion.div
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.6 }}
-  className="flex flex-wrap gap-3 mb-6"
->
-  {['پربازدیدترین', 'پرفروش‌ترین', 'گران‌ترین', 'ارزان‌ترین'].map((filter, index) => (
-    <motion.button
-      key={filter}
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4, delay: index * 0.1 }}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className={`px-4 py-2 rounded-xl text-sm font-medium transition-all font-[var(--font-yekan)] ${
-        index === 0
-          ? 'bg-amber-600 text-white shadow-lg'
-          : 'bg-white text-gray-700 border border-amber-200 hover:bg-amber-50 hover:text-amber-700'
-      }`}
-    >
-      {filter}
-    </motion.button>
-  ))}
-</motion.div>
-
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="flex flex-wrap gap-3 mb-6"
+            >
+              {['پربازدیدترین', 'پرفروش‌ترین', 'گران‌ترین', 'ارزان‌ترین'].map((filter, index) => (
+                <motion.button
+                  key={filter}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all font-[var(--font-yekan)] ${
+                    index === 0
+                      ? 'bg-amber-600 text-white shadow-lg'
+                      : 'bg-white text-gray-700 border border-amber-200 hover:bg-amber-50 hover:text-amber-700'
+                  }`}
+                >
+                  {filter}
+                </motion.button>
+              ))}
+            </motion.div>
 
             {/* Products Grid/List */}
             <motion.div
@@ -469,129 +354,147 @@ export default function CoffeeCategoryPage() {
                   : 'space-y-6'
               }`}
             >
+              
               {coffeeProducts.map((product, index) => (
-                <motion.div
-                  key={product.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-amber-100 overflow-hidden group ${
-                    viewMode === 'list' ? 'flex' : ''
-                  }`}
+                <Link 
+                  key={product.id} 
+                  href={`/CoffeeCategoryPage/${product.id}`}
+                  className="block"
                 >
-                  {/* Product Image */}
-                  <div className={`relative ${viewMode === 'list' ? 'w-48 flex-shrink-0' : 'h-48'}`}>
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    
-                    {/* Discount Badge */}
-                    {product.discount > 0 && (
-                      <div className="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-                        {product.discount}% تخفیف
-                      </div>
-                    )}
-                    
-                    {/* Product Badge */}
-                    <div className="absolute top-3 right-3">
-                      <span className="bg-gradient-to-r from-amber-600 to-amber-700 text-white text-xs px-2 py-1 rounded-full font-medium">
-                        {product.badge}
-                      </span>
-                    </div>
-
-                    {/* Quick Actions */}
-                    <div className="absolute bottom-3 left-3 flex gap-2">
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="bg-white/90 hover:bg-white text-amber-700 p-2 rounded-full shadow-lg transition-all"
-                      >
-                        <FiHeart size={16} />
-                      </motion.button>
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="bg-white/90 hover:bg-white text-amber-700 p-2 rounded-full shadow-lg transition-all"
-                      >
-                        <FiShoppingCart size={16} />
-                      </motion.button>
-                    </div>
-                  </div>
-
-                  {/* Product Info */}
-                  <div className={`p-4 flex-1 ${viewMode === 'list' ? 'flex flex-col justify-between' : ''}`}>
-                    <div>
-                      <h3 className="font-bold text-gray-800 mb-2 text-sm leading-relaxed font-[var(--font-yekan)]">
-                        {product.name}
-                      </h3>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-amber-100 overflow-hidden group cursor-pointer ${
+                      viewMode === 'list' ? 'flex' : ''
+                    }`}
+                  >
+                    {/* Product Image */}
+                    <div className={`relative ${viewMode === 'list' ? 'w-48 flex-shrink-0' : 'h-48'}`}>
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
                       
-                      {/* Rating */}
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="flex items-center gap-1">
-                          {[...Array(5)].map((_, i) => (
-                            <FiStar
-                              key={i}
-                              className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`}
-                            />
-                          ))}
+                      {/* Discount Badge */}
+                      {product.discount > 0 && (
+                        <div className="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+                          {product.discount}% تخفیف
                         </div>
-                        <span className="text-xs text-gray-500 font-[var(--font-yekan)]">
-                          ({product.reviews} نظر)
+                      )}
+                      
+                      {/* Product Badge */}
+                      <div className="absolute top-3 right-3">
+                        <span className="bg-gradient-to-r from-amber-600 to-amber-700 text-white text-xs px-2 py-1 rounded-full font-medium">
+                          {product.badge}
                         </span>
                       </div>
 
-                      {/* Prime Badge */}
-                      {product.isPrime && (
-                        <div className="flex items-center gap-1 mb-3">
-                          <div className="bg-gradient-to-r from-amber-600 to-amber-700 text-white text-xs px-2 py-1 rounded-full font-bold">
-                            PRIME
-                          </div>
-                          <span className="text-xs text-amber-600 font-[var(--font-yekan)]">ارسال رایگان</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Price and Actions */}
-                    <div className="space-y-2 mt-3">
-                      {/* Ask Me Button - Same size as Add to Cart */}
-                      <div className="flex justify-end">
+                      {/* Quick Actions */}
+                      <div className="absolute bottom-3 left-3 flex gap-2">
                         <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-lg font-[var(--font-yekan)] whitespace-nowrap"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="bg-white/90 hover:bg-white text-amber-700 p-2 rounded-full shadow-lg transition-all"
+                          onClick={(e) => {
+                            e.preventDefault();
+                          }}
                         >
-                          <FiMessageCircle size={14} />
-                          <span className="text-xs">از من بپرس — آنلاین هستم</span>
+                          <FiHeart size={16} />
+                        </motion.button>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="bg-white/90 hover:bg-white text-amber-700 p-2 rounded-full shadow-lg transition-all"
+                          onClick={(e) => {
+                            e.preventDefault();
+                          }}
+                        >
+                          <FiShoppingCart size={16} />
                         </motion.button>
                       </div>
+                    </div>
 
-                      {/* Price and Add to Cart */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg font-bold text-amber-700 font-[var(--font-yekan)]">
-                            {product.price}
-                          </span>
-                          {product.originalPrice && (
-                            <span className="text-sm text-gray-500 line-through font-[var(--font-yekan)]">
-                              {product.originalPrice}
-                            </span>
-                          )}
-                        </div>
+                    {/* Product Info */}
+                    <div className={`p-4 flex-1 ${viewMode === 'list' ? 'flex flex-col justify-between' : ''}`}>
+                      <div>
+                        <h3 className="font-bold text-gray-800 mb-2 text-sm leading-relaxed font-[var(--font-yekan)]">
+                          {product.name}
+                        </h3>
                         
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-lg font-[var(--font-yekan)]"
-                        >
-                          افزودن به سبد
-                        </motion.button>
+                        {/* Rating */}
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="flex items-center gap-1">
+                            {[...Array(5)].map((_, i) => (
+                              <FiStar
+                                key={i}
+                                className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-xs text-gray-500 font-[var(--font-yekan)]">
+                            ({product.reviews} نظر)
+                          </span>
+                        </div>
+
+                        {/* Prime Badge */}
+                        {product.isPrime && (
+                          <div className="flex items-center gap-1 mb-3">
+                            <div className="bg-gradient-to-r from-amber-600 to-amber-700 text-white text-xs px-2 py-1 rounded-full font-bold">
+                              PRIME
+                            </div>
+                            <span className="text-xs text-amber-600 font-[var(--font-yekan)]">ارسال رایگان</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Price and Actions */}
+                      <div className="space-y-2 mt-3">
+                        {/* Ask Me Button */}
+                        <div className="flex justify-end">
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-lg font-[var(--font-yekan)] whitespace-nowrap"
+                            onClick={(e) => {
+                              e.preventDefault();
+                            }}
+                          >
+                            <FiMessageCircle size={14} />
+                            <span className="text-xs">از من بپرس — آنلاین هستم</span>
+                          </motion.button>
+                        </div>
+
+                        {/* Price and Add to Cart */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg font-bold text-amber-700 font-[var(--font-yekan)]">
+                              {product.price}
+                            </span>
+                            {product.originalPrice && (
+                              <span className="text-sm text-gray-500 line-through font-[var(--font-yekan)]">
+                                {product.originalPrice}
+                              </span>
+                            )}
+                          </div>
+                          
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-lg font-[var(--font-yekan)]"
+                            onClick={(e) => {
+                              e.preventDefault();
+                            }}
+                          >
+                            افزودن به سبد
+                          </motion.button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                </Link>
               ))}
             </motion.div>
 
@@ -626,7 +529,6 @@ export default function CoffeeCategoryPage() {
       <AnimatePresence>
         {showMobileFilters && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -635,7 +537,6 @@ export default function CoffeeCategoryPage() {
               className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
             />
             
-            {/* Filters Drawer */}
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
@@ -661,7 +562,7 @@ export default function CoffeeCategoryPage() {
                   <FilterSection title="دسته‌بندی‌ها" filterKey="categories">
                     <div className="space-y-2">
                       {categories.map((category) => (
-                        <label key={category.name} className="flex items-center justify-between cursor-pointer group">
+                        <label key={category.id} className="flex items-center justify-between cursor-pointer group">
                           <div className="flex items-center gap-2">
                             <input
                               type="checkbox"
@@ -685,7 +586,7 @@ export default function CoffeeCategoryPage() {
                   <FilterSection title="محدوده قیمت" filterKey="price">
                     <div className="space-y-2">
                       {filters.priceRanges.map((range) => (
-                        <label key={range.value} className="flex items-center gap-2 cursor-pointer group">
+                        <label key={range.id} className="flex items-center gap-2 cursor-pointer group">
                           <input type="radio" name="price" className="text-amber-600 focus:ring-amber-500" />
                           <span className="text-sm text-gray-600 group-hover:text-amber-700 transition-colors font-[var(--font-yekan)]">
                             {range.label}
@@ -747,5 +648,5 @@ export default function CoffeeCategoryPage() {
         )}
       </AnimatePresence>
     </div>
-  ); 
+  );
 }

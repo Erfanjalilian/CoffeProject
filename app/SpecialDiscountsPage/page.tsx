@@ -2,8 +2,71 @@
 
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiFilter, FiGrid, FiList, FiStar, FiShoppingCart, FiHeart, FiChevronDown, FiX, FiClock, FiZap } from "react-icons/fi";
+
+interface DiscountProduct {
+  id: number;
+  name: string;
+  price: string;
+  originalPrice?: string;
+  image: string;
+  category: string;
+  badge: string;
+  rating: number;
+  reviews: number;
+  isPrime: boolean;
+  discount: number;
+  dealType: string;
+  timeLeft: string;
+  soldCount: number;
+  totalCount: number;
+  type: string;
+}
+
+interface DealType {
+  id: string;
+  name: string;
+  count: number;
+  icon: string;
+}
+
+interface Category {
+  id: number;
+  name: string;
+  count: number;
+  active: boolean;
+}
+
+interface PriceRange {
+  id: number;
+  label: string;
+  value: string;
+}
+
+interface DiscountRange {
+  id: number;
+  label: string;
+  value: string;
+}
+
+interface Filters {
+  brands: string[];
+  priceRanges: PriceRange[];
+  discountRanges: DiscountRange[];
+  ratings: number[];
+}
+
+interface StoreData {
+  products: {
+    discount: DiscountProduct[];
+  };
+  categories: {
+    main: Category[];
+  };
+  filters: Filters;
+  dealTypes: DealType[];
+}
 
 export default function SpecialDiscountsPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -11,247 +74,42 @@ export default function SpecialDiscountsPage() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [expandedFilter, setExpandedFilter] = useState<string | null>(null);
   const [activeDealType, setActiveDealType] = useState('all');
+  const [dealProducts, setDealProducts] = useState<DiscountProduct[]>([]);
+  const [dealTypes, setDealTypes] = useState<DealType[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [filters, setFilters] = useState<Filters>({ 
+    brands: [], 
+    priceRanges: [], 
+    discountRanges: [], 
+    ratings: [] 
+  });
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const dealProducts = [
-    {
-      id: 1,
-      name: "قهوه اسپرسو ایتالیایی - پک اقتصادی",
-      price: "۲۹۰,۰۰۰ تومان",
-      originalPrice: "۳۴۰,۰۰۰ تومان",
-      image: "/Images/premium_photo-1674407009848-4da7a12b6b25.avif",
-      category: "نوشیدنی",
-      badge: "شگفت‌انگیز",
-      rating: 4.8,
-      reviews: 124,
-      isPrime: true,
-      discount: 15,
-      dealType: "lightning",
-      timeLeft: "02:45:30",
-      soldCount: 45,
-      totalCount: 100
-    },
-    {
-      id: 2,
-      name: "فرنچ پرس شیشه‌ای حرفه‌ای + قهوه هدیه",
-      price: "۱۸۰,۰۰۰ تومان",
-      originalPrice: "۲۲۰,۰۰۰ تومان",
-      image: "/Images/photo-1596098823457-74e360fcd023.avif",
-      category: "تجهیزات",
-      badge: "فروش ویژه",
-      rating: 4.6,
-      reviews: 89,
-      isPrime: true,
-      discount: 18,
-      dealType: "special",
-      timeLeft: "1 روز",
-      soldCount: 23,
-      totalCount: 50
-    },
-    {
-      id: 3,
-      name: "دانه قهوه برزیل درجه یک - پک خانوادگی",
-      price: "۲۲۰,۰۰۰ تومان",
-      originalPrice: "۲۸۰,۰۰۰ تومان",
-      image: "/Images/premium_photo-1671379526961-1aebb82b317b.avif",
-      category: "دانه خاص",
-      badge: "تخفیف پایان فصل",
-      rating: 4.9,
-      reviews: 203,
-      isPrime: true,
-      discount: 21,
-      dealType: "clearance",
-      timeLeft: "3 روز",
-      soldCount: 78,
-      totalCount: 120
-    },
-    {
-      id: 4,
-      name: "قهوه ترک اصل استانبولی - پک طلایی",
-      price: "۲۶۰,۰۰۰ تومان",
-      originalPrice: "۳۰۰,۰۰۰ تومان",
-      image: "/Images/premium_photo-1674327105076-36c4419864cf.avif",
-      category: "نوشیدنی",
-      badge: "پیشنهاد شگفت‌انگیز",
-      rating: 4.7,
-      reviews: 156,
-      isPrime: false,
-      discount: 13,
-      dealType: "lightning",
-      timeLeft: "01:15:20",
-      soldCount: 67,
-      totalCount: 80
-    },
-    {
-      id: 5,
-      name: "آسیاب قهوه حرفه‌ای دیجیتال + آموزش رایگان",
-      price: "۳۵۰,۰۰۰ تومان",
-      originalPrice: "۴۲۰,۰۰۰ تومان",
-      image: "/Images/photo-1592663527359-cf6642f54cff.avif",
-      category: "تجهیزات",
-      badge: "فروش ویژه",
-      rating: 4.8,
-      reviews: 78,
-      isPrime: true,
-      discount: 17,
-      dealType: "special",
-      timeLeft: "2 روز",
-      soldCount: 34,
-      totalCount: 60
-    },
-    {
-      id: 6,
-      name: "موکاپات استیل ایتالیایی - مجموعه کامل",
-      price: "۱۴۰,۰۰۰ تومان",
-      originalPrice: "۱۷۰,۰۰۰ تومان",
-      image: "/Images/photo-1594075731547-8c705bb69e50.avif",
-      category: "تجهیزات",
-      badge: "شگفت‌انگیز",
-      rating: 4.6,
-      reviews: 92,
-      isPrime: true,
-      discount: 18,
-      dealType: "lightning",
-      timeLeft: "04:20:45",
-      soldCount: 89,
-      totalCount: 100
-    },
-    {
-      id: 7,
-      name: "قهوه عربیکا اتیوپی - پک اقتصادی",
-      price: "۳۱۰,۰۰۰ تومان",
-      originalPrice: "۳۸۰,۰۰۰ تومان",
-      image: "/Images/photo-1525088553748-01d6e210e00b.avif",
-      category: "دانه خاص",
-      badge: "تخفیف ویژه",
-      rating: 4.9,
-      reviews: 167,
-      isPrime: true,
-      discount: 18,
-      dealType: "clearance",
-      timeLeft: "5 روز",
-      soldCount: 45,
-      totalCount: 75
-    },
-    {
-      id: 8,
-      name: "پورتافیلتر فلزی حرفه‌ای + تمپر رایگان",
-      price: "۹۰,۰۰۰ تومان",
-      originalPrice: "۱۲۰,۰۰۰ تومان",
-      image: "/Images/photo-1514432324607-a09d9b4aefdd.avif",
-      category: "تجهیزات",
-      badge: "شگفت‌انگیز",
-      rating: 4.7,
-      reviews: 64,
-      isPrime: false,
-      discount: 25,
-      dealType: "lightning",
-      timeLeft: "00:45:10",
-      soldCount: 28,
-      totalCount: 40
-    },
-    {
-      id: 9,
-      name: "قهوه کلمبیا سوپریم - پک ویژه",
-      price: "۲۷۰,۰۰۰ تومان",
-      originalPrice: "۳۲۰,۰۰۰ تومان",
-      image: "/Images/premium_photo-1669687924558-386bff1a0469.avif",
-      category: "نوشیدنی",
-      badge: "فروش ویژه",
-      rating: 4.8,
-      reviews: 134,
-      isPrime: true,
-      discount: 16,
-      dealType: "special",
-      timeLeft: "4 روز",
-      soldCount: 56,
-      totalCount: 90
-    },
-    {
-      id: 10,
-      name: "سرمaker قهوه ساز چند کاره + قهوه هدیه",
-      price: "۴۲۰,۰۰۰ تومان",
-      originalPrice: "۵۰۰,۰۰۰ تومان",
-      image: "/Images/premium_photo-1664970900335-a7c99062bc51.avif",
-      category: "تجهیزات",
-      badge: "تخفیف پایان فصل",
-      rating: 4.5,
-      reviews: 45,
-      isPrime: true,
-      discount: 16,
-      dealType: "clearance",
-      timeLeft: "6 روز",
-      soldCount: 23,
-      totalCount: 40
-    },
-    {
-      id: 11,
-      name: "قهوه کنیا AA - پک اقتصادی",
-      price: "۳۳۰,۰۰۰ تومان",
-      originalPrice: "۴۰۰,۰۰۰ تومان",
-      image: "/Images/photo-1621135177072-57c9b6242e7a.avif",
-      category: "دانه خاص",
-      badge: "شگفت‌انگیز",
-      rating: 4.9,
-      reviews: 98,
-      isPrime: true,
-      discount: 18,
-      dealType: "lightning",
-      timeLeft: "03:10:25",
-      soldCount: 72,
-      totalCount: 100
-    },
-    {
-      id: 12,
-      name: "ست کامل قهوه ساز خانگی + آموزش",
-      price: "۵۵۰,۰۰۰ تومان",
-      originalPrice: "۶۸۰,۰۰۰ تومان",
-      image: "/Images/photo-1514066558159-fc8c737ef259.avif",
-      category: "تجهیزات",
-      badge: "فروش ویژه",
-      rating: 4.7,
-      reviews: 112,
-      isPrime: true,
-      discount: 19,
-      dealType: "special",
-      timeLeft: "3 روز",
-      soldCount: 38,
-      totalCount: 60
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        const response = await fetch('https://raw.githubusercontent.com/Erfanjalilian/backendOnlineStore/refs/heads/main/data.json');
+        const data: StoreData = await response.json();
+        
+        setDealProducts(data.products?.discount || []);
+        setDealTypes(data.dealTypes || []);
+        setCategories(data.categories?.main || []);
+        setFilters(data.filters || { 
+          brands: [], 
+          priceRanges: [], 
+          discountRanges: [], 
+          ratings: [] 
+        });
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setLoading(false);
+      }
     }
-  ];
-
-  const dealTypes = [
-    { id: 'all', name: 'همه تخفیف‌ها', count: 45, icon: FiZap },
-    { id: 'lightning', name: 'پیشنهادهای شگفت‌انگیز', count: 18, icon: FiZap },
-    { id: 'special', name: 'فروش ویژه', count: 15, icon: FiStar },
-    { id: 'clearance', name: 'تخفیف پایان فصل', count: 12, icon: FiClock }
-  ];
-
-  const categories = [
-    { name: "همه دسته‌بندی‌ها", count: 45, active: true },
-    { name: "قهوه اسپرسو", count: 12, active: false },
-    { name: "قهوه ترک", count: 8, active: false },
-    { name: "دانه قهوه", count: 15, active: false },
-    { name: "قهوه فوری", count: 5, active: false },
-    { name: "تجهیزات دم‌آوری", count: 25, active: false },
-    { name: "اکسسوری قهوه", count: 18, active: false }
-  ];
-
-  const filters = {
-    brands: ["دیویدوف", "لاوازا", "ایلی", "استارباکس", "نسپرسو", "کمکس"],
-    priceRanges: [
-      { label: "زیر ۱۰۰ هزار تومان", value: "0-100" },
-      { label: "۱۰۰ تا ۳۰۰ هزار تومان", value: "100-300" },
-      { label: "۳۰۰ تا ۵۰۰ هزار تومان", value: "300-500" },
-      { label: "بالای ۵۰۰ هزار تومان", value: "500-1000" }
-    ],
-    discountRanges: [
-      { label: "۱۰٪ تا ۲۰٪", value: "10-20" },
-      { label: "۲۰٪ تا ۳۰٪", value: "20-30" },
-      { label: "۳۰٪ تا ۵۰٪", value: "30-50" },
-      { label: "بالای ۵۰٪", value: "50-100" }
-    ],
-    ratings: [4, 3, 2, 1]
-  };
+    
+    loadData();
+  }, []);
 
   const filteredProducts = dealProducts.filter(product => 
     activeDealType === 'all' || product.dealType === activeDealType
@@ -300,6 +158,17 @@ export default function SpecialDiscountsPage() {
       </div>
     );
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white pt-24 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 font-[var(--font-yekan)]">در حال بارگذاری تخفیف‌ها...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white pt-24">
@@ -364,7 +233,8 @@ export default function SpecialDiscountsPage() {
         >
           <div className="flex flex-wrap gap-4">
             {dealTypes.map((dealType) => {
-              const IconComponent = dealType.icon;
+              const IconComponent = dealType.icon === "FiZap" ? FiZap : 
+                                 dealType.icon === "FiStar" ? FiStar : FiClock;
               return (
                 <motion.button
                   key={dealType.id}
@@ -374,7 +244,7 @@ export default function SpecialDiscountsPage() {
                   className={`flex items-center gap-2 px-4 py-3 rounded-xl transition-all font-[var(--font-yekan)] ${
                     activeDealType === dealType.id
                       ? 'bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-lg'
-                      : 'bg-amber-50 text-gray-700 border border-amber-200 hover:bg-amber-100'
+                      : 'bg-amber-50 text-gray-700 border border-amber-200 hover:bg-amber-100 hover:text-amber-700'
                   }`}
                 >
                   <IconComponent size={18} />
@@ -412,7 +282,7 @@ export default function SpecialDiscountsPage() {
                 <div className="space-y-2">
                   {filters.discountRanges.map((range, index) => (
                     <motion.label
-                      key={range.value}
+                      key={range.id}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -433,7 +303,7 @@ export default function SpecialDiscountsPage() {
                 <div className="space-y-2">
                   {categories.map((category, index) => (
                     <motion.label
-                      key={category.name}
+                      key={category.id}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -464,7 +334,7 @@ export default function SpecialDiscountsPage() {
                 <div className="space-y-2">
                   {filters.priceRanges.map((range, index) => (
                     <motion.label
-                      key={range.value}
+                      key={range.id}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -746,7 +616,7 @@ export default function SpecialDiscountsPage() {
                   <FilterSection title="میزان تخفیف" filterKey="discount">
                     <div className="space-y-2">
                       {filters.discountRanges.map((range) => (
-                        <label key={range.value} className="flex items-center gap-2 cursor-pointer group">
+                        <label key={range.id} className="flex items-center gap-2 cursor-pointer group">
                           <input type="radio" name="discount" className="text-amber-600 focus:ring-amber-500" />
                           <span className="text-sm text-gray-600 group-hover:text-amber-700 transition-colors font-[var(--font-yekan)]">
                             {range.label}
@@ -760,7 +630,7 @@ export default function SpecialDiscountsPage() {
                   <FilterSection title="دسته‌بندی‌ها" filterKey="categories">
                     <div className="space-y-2">
                       {categories.map((category) => (
-                        <label key={category.name} className="flex items-center justify-between cursor-pointer group">
+                        <label key={category.id} className="flex items-center justify-between cursor-pointer group">
                           <div className="flex items-center gap-2">
                             <input
                               type="checkbox"
@@ -784,7 +654,7 @@ export default function SpecialDiscountsPage() {
                   <FilterSection title="محدوده قیمت" filterKey="price">
                     <div className="space-y-2">
                       {filters.priceRanges.map((range) => (
-                        <label key={range.value} className="flex items-center gap-2 cursor-pointer group">
+                        <label key={range.id} className="flex items-center gap-2 cursor-pointer group">
                           <input type="radio" name="price" className="text-amber-600 focus:ring-amber-500" />
                           <span className="text-sm text-gray-600 group-hover:text-amber-700 transition-colors font-[var(--font-yekan)]">
                             {range.label}

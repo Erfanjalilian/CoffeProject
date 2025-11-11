@@ -180,7 +180,7 @@ export default function Header() {
           </Link>
 
           {/* Cart */}
-          <Link href="/cart">
+          <Link href="/CartPage">
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
