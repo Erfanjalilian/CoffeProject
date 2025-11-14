@@ -21,11 +21,23 @@ import {
 } from "react-icons/fi";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "@/contaxt/CartContext"; // اضافه کردن هوک useCart
+
+// Define types for navigation items
+interface NavItem {
+  name: string;
+  icon: React.ComponentType<{ size?: number }>;
+  href: string;
+}
 
 export default function Header() {
-  const [isLangOpen, setIsLangOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const { cart } = useCart(); // استفاده از هوک useCart
+
+  // محاسبه تعداد کل آیتم‌های سبد خرید
+  const totalItems: number = cart.reduce((total: number, product) => total + product.quantity, 0);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -33,13 +45,13 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const headerClass = `w-full fixed top-0 z-50 transition-all duration-500 ${
+  const headerClass: string = `w-full fixed top-0 z-50 transition-all duration-500 ${
     isScrolled
       ? "bg-white/95 backdrop-blur-lg shadow-lg shadow-amber-100/50"
       : "bg-gradient-to-b from-white to-amber-50/80 backdrop-blur-sm"
   }`;
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { name: "صفحه اصلی", icon: FiHome, href: "/" },
     { name: "دسته‌بندی کالا ها", icon: FiCoffee, href: "/CoffeeCategoryPage" },
     { name: "تخفیف‌های امروز", icon: FiTag, href: "/SpecialDiscountsPage" },
@@ -47,7 +59,7 @@ export default function Header() {
     { name: "فروشنده باش", icon: FiTool, href: "/BecomeSellerPage" },
   ];
 
-  const mobileAdditionalItems = [
+  const mobileAdditionalItems: NavItem[] = [
     { name: "فروشنده شوید", icon: FiUser, href: "/BecomeSellerPage" },
     { name: "پشتیبانی", icon: FiHelpCircle, href: "/support" },
     { name: "درباره ما", icon: FiHelpCircle, href: "/about" },
@@ -179,7 +191,7 @@ export default function Header() {
             </motion.button>
           </Link>
 
-          {/* Cart */}
+          {/* Cart - UPDATED SECTION */}
           <Link href="/CartPage">
             <motion.button
               whileHover={{ scale: 1.1 }}
@@ -187,14 +199,22 @@ export default function Header() {
               className="relative p-2 text-gray-700 hover:text-amber-700 rounded-xl hover:bg-amber-50 transition-colors"
             >
               <FiShoppingCart size={22} />
-              <span className="absolute -top-1 -right-1 bg-gradient-to-r from-amber-600 to-amber-700 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                ۲
-              </span>
+              {/* Dynamic cart count badge */}
+              {totalItems > 0 && (
+                <motion.span 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  key={totalItems} // This ensures re-animation when count changes
+                  className="absolute -top-1 -right-1 bg-gradient-to-r from-amber-600 to-amber-700 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+                >
+                  {totalItems}
+                </motion.span>
+              )}
             </motion.button>
           </Link>
 
           {/* User */}
-          <Link href="/login">
+          <Link href="/LoginPage">
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -215,7 +235,7 @@ export default function Header() {
         className="hidden md:flex justify-start items-center px-8 py-3 text-sm font-medium bg-gradient-to-r from-amber-50/50 to-orange-50/50 backdrop-blur-sm border-b border-amber-200/50"
       >
         <div className="flex items-center gap-8 ml-auto">
-          {navItems.map((item) => (
+          {navItems.map((item: NavItem) => (
             <motion.div key={item.name} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
               <Link
                 href={item.href}
@@ -292,7 +312,7 @@ export default function Header() {
 
               {/* Navigation Links */}
               <nav className="px-6 space-y-1">
-                {navItems.map((item) => (
+                {navItems.map((item: NavItem) => (
                   <Link
                     key={item.name}
                     href={item.href}
@@ -306,7 +326,7 @@ export default function Header() {
 
                 <div className="border-t border-amber-200 my-4"></div>
 
-                {mobileAdditionalItems.map((item) => (
+                {mobileAdditionalItems.map((item: NavItem) => (
                   <Link
                     key={item.name}
                     href={item.href}
@@ -327,10 +347,12 @@ export default function Header() {
                     <span className="font-[var(--font-yekan)]">ورود / ثبت‌نام</span>
                   </motion.button>
                 </Link>
-                <Link href="/cart" onClick={() => setIsMenuOpen(false)}>
+                <Link href="/CartPage" onClick={() => setIsMenuOpen(false)}>
                   <motion.button whileHover={{ scale: 1.02 }} className="w-full flex items-center gap-3 p-4 text-gray-700 hover:text-amber-700 hover:bg-amber-100/80 rounded-xl transition-all">
                     <FiShoppingCart size={20} />
-                    <span className="font-[var(--font-yekan)]">سبد خرید</span>
+                    <span className="font-[var(--font-yekan)]">
+                      سبد خرید {totalItems > 0 && `(${totalItems})`}
+                    </span>
                   </motion.button>
                 </Link>
                 <Link href="/wishlist" onClick={() => setIsMenuOpen(false)}>
